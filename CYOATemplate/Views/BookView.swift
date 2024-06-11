@@ -36,6 +36,7 @@ struct BookView: View {
                         Text("\(book.currentPageId!)")
                             .font(.largeTitle)
                         Spacer()
+                        Text("Points: \(book.reader.currentPoints)")
                     }
                     .padding()
                     
