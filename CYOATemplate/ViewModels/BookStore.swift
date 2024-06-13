@@ -71,7 +71,7 @@ class BookStore: Observable {
     
     // MARK: Initializer(s)
     init() {
-        self.reader = Reader(prefersDarkMode: false, currentPoints: 500)
+        self.reader = Reader(prefersDarkMode: false, stogotseraned: 500, hpearned: 100, atpearned: 400)
         
         // Restore state for this user from prior sesssion, if possible
         Task {
@@ -124,7 +124,7 @@ class BookStore: Observable {
                 
                 do {
 
-                    let reader = Reader(prefersDarkMode: false, currentPoints: 500)
+                    let reader = Reader(prefersDarkMode: false, stogotseraned: 500, hpearned: 100, atpearned: 400)
                     
                     // Create a Reader instance and add it to the database for this user
                     let newlyInsertedReader: Reader = try await supabase
@@ -162,11 +162,11 @@ class BookStore: Observable {
     }
     
     // Return the details of the current page
-    func getCurrentPage() async throws -> Page? {
+    func getCurrentPage() async throws -> Events? {
         
         do {
-            let currentPage: Page = try await supabase
-                .from("page")
+            let currentPage: Events = try await supabase
+                .from("Events")
                 .select()
                 .eq("id", value: self.currentPageId)
                 .single()
