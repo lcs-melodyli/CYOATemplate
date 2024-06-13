@@ -7,30 +7,31 @@
 
 import Foundation
 
-struct Page: Identifiable, Codable {
+struct Events: Identifiable, Codable {
     
     // MARK: Stored properties
     var id: Int
     var narrative: String
-    var image: String?
-    var endingContext: String?
-    var endingTypeId: Int?
+    var success_rate: Double
+    var hp_increment: Int
+    var atp_increment: Int
+    var stogots_increment: Int
+    var name: String
+    
     
     // When decoding and encoding from JSON, translate snake_case
     // column names into camelCase
     enum CodingKeys: String, CodingKey {
         case id
         case narrative
-        case image
-        case endingContext = "ending_context"
-        case endingTypeId = "ending_type_id"
+        case success_rate
+        case hp_increment = "hp_increment"
+        case atp_increment = "atp_increment"
+        case stogots_increment = "Stogots_increment"
+        case name
     }
     
     // MARK: Computed properties
-    var isAnEndingOfTheStory: Bool {
-        // Returns true when there is a ending type ID specified,
-        // which means this page is an ending to the story
-        return endingTypeId != nil
-    }
+    
     
 }
