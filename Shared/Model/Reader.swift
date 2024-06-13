@@ -13,7 +13,9 @@ struct Reader: Identifiable, Codable {
     var name: String?
     var prefersDarkMode: Bool
     var lastPageReadId: Int?
-    var currentPoints: Int
+    var stogotseraned: Int
+    var hpearned: Int
+    var atpearned: Int
     
 
     // When decoding and encoding from JSON, translate snake_case
@@ -22,8 +24,9 @@ struct Reader: Identifiable, Codable {
         case id
         case name
         case prefersDarkMode = "prefers_dark_mode"
-        case lastPageReadId = "last_page_read_id"
-        case currentPoints = "current_points"
+        case stogotseraned = "Stogots_eraned"
+        case hpearned = "hp_eraned"
+        case atpearned = "at_eraned"
     }
     
 }
