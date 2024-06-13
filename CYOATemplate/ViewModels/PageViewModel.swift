@@ -6,19 +6,38 @@
 //
 
 import Foundation
+import Combine
 
-@Observable
-class PageViewModel: Observable {
+class PageViewModel: ObservableObject {
     
-    // Details of the current page being read
-    var page: Page?
+    // The book property accessed from the environment
+    @Published var book: BookStore
     
+    // The Events property to be used in the view
+    @Published var events: Events?
+    
+    // Initializer
     init(book: BookStore) {
+        self.book = book
         
-        // Load the details of the current page from the database
-        Task {
-            self.page = try await book.getCurrentPage()
-        }
+        // Load the initial event or handle as needed
+        loadEvents()
     }
     
+    // Method to load event data
+    func loadEvents() {
+        // Example data loading
+        // Replace with actual data loading logic
+        self.events = Events(
+            id: 1,
+            narrative: "This is an example narrative.",
+            success_rate: 0.75,
+            hp_increment: 10,
+            atp_increment: 5,
+            stogots_increment: 2,
+            name: "Example Event"
+        )
+    }
 }
+
+
