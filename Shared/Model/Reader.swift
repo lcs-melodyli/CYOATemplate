@@ -11,9 +11,10 @@ struct Reader: Identifiable, Codable {
     
     var id: Int?
     var name: String?
+    var userId: UUID?
     var prefersDarkMode: Bool
     var lastPageReadId: Int?
-    var stogotseraned: Int
+    var Stogots_earned: Int
     var hpearned: Int
     var atpearned: Int
     
@@ -23,10 +24,11 @@ struct Reader: Identifiable, Codable {
     enum CodingKeys: String, CodingKey {
         case id
         case name
+        case userId = "user_id"
         case prefersDarkMode = "prefers_dark_mode"
-        case stogotseraned = "Stogots_eraned"
-        case hpearned = "hp_eraned"
-        case atpearned = "at_eraned"
+        case Stogots_earned = "Stogots_earned"
+        case hpearned = "hp_earned"
+        case atpearned = "atp_earned"
     }
     
 }

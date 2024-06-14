@@ -71,7 +71,7 @@ class BookStore: Observable {
     
     // MARK: Initializer(s)
     init() {
-        self.reader = Reader(prefersDarkMode: false, stogotseraned: 500, hpearned: 100, atpearned: 400)
+        self.reader = Reader(prefersDarkMode: false, Stogots_earned: 500, hpearned: 100, atpearned: 400)
         
         // Restore state for this user from prior sesssion, if possible
         Task {
@@ -114,17 +114,17 @@ class BookStore: Observable {
         } catch {
             
             // Convert the generic error object into something we can inexpect
-            let decodedError = error as! PostgrestError
+            let decodedError = error as? PostgrestError
             
             // When (likely if at this point) no rows are returned
             // we need to set the reader's state in the database for the first time
-            if let code = decodedError.code, code == "PGRST116" {
+            if let code = decodedError?.code, code == "PGRST116" {
 
                 print("No rows, or multiple rows, returned.")
                 
                 do {
 
-                    let reader = Reader(prefersDarkMode: false, stogotseraned: 500, hpearned: 100, atpearned: 400)
+                    let reader = Reader(prefersDarkMode: false, Stogots_earned: 500, hpearned: 100, atpearned: 400)
                     
                     // Create a Reader instance and add it to the database for this user
                     let newlyInsertedReader: Reader = try await supabase
@@ -198,7 +198,7 @@ class BookStore: Observable {
                 try await supabase
                     .from("reader")
                     .update(self.reader)
-                    .eq("id", value: self.reader.id!)
+                    .eq("id", value: self.reader.id)
                     .execute()
                 
             } catch {

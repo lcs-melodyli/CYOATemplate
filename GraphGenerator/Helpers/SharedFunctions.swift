@@ -19,8 +19,8 @@ func generateGraphvizCommands(using description: StoryInformation, usingClient d
         
         print("About to read all pages...", terminator: "")
         
-        let pages: [Page] = try await db
-            .from("page")
+        let events: [Events] = try await db
+            .from("Events")
             .select()
             .order("id", ascending: true)
             .execute()
@@ -62,69 +62,22 @@ func generateGraphvizCommands(using description: StoryInformation, usingClient d
         var endingsCount = [String : Int]()
         
         // Build the graph itself from a sorted list of the pages
-        for page in pages {
+        for events in events {
             
-            print("Processing page \(page.id)...")
+            print("Processing page \(events.id)...")
             
             // Handle ending pages
-            if let endingTypeId = page.endingTypeId {
-                
-                print("Page is an ending, about to process ending... ", terminator: "")
-                
-                do {
-                    
-                    let ending: EndingType = try await db
-                        .from("ending_type")
-                        .select()
-                        .eq("id", value: endingTypeId)
-                        .single()
-                        .execute()
-                        .value
-                    
-                    // Make ending pages show up in red
-                    output += "\(page.id) [style=\"filled\", fillcolor=\"\(ending.color)\"]\n"
-                    
-                    // Get the ending description, if it exists
-                    let endingDescription = page.endingContext ?? ""
-                    
-                    // Create an invisible page after each ending page
-                    output += "\"\(endingDescription) \(page.id)\" [style=invis]\n"
-                    
-                    // Make a label after the ending page
-                    output += "\(page.id) -> \"\(endingDescription) \(page.id)\" [labelangle=0, minlen=3,  color=white, taillabel=\"\\n\(endingDescription)\", fontname=\"Helvetica Bold\"]\n"
-                    
-                    // Track endings by category
-                    if let valueForKey = endingsCount["\(ending.id)"] {
-                        // Increment count of endings of this type
-                        endingsCount["\(ending.id)"]! = valueForKey + 1
-                    } else {
-                        // Start count of endings of this type
-                        endingsCount["\(ending.id)"] = 1
-                    }
-                    
-                    print("done.")
-                    
-                } catch {
-                    
-                    debugPrint(error)
-                    
-                    print("===")
-                    print("Could not access ending_type table in database when using ending type ID of \(page.endingTypeId ?? -1).")
-                    print(error.localizedDescription)
-
-                }
-                
-            }
+        
             
             // Draw pages and edges between pages
-            print("About to process edges for page \(page.id)...", terminator: "")
-            output += "\(page.id) -> {"
+            print("About to process edges for page \(events.id)...", terminator: "")
+            output += "\(events.id) -> {"
             do {
                 
                 let edges: [Edge] = try await db
                     .from("edge")
                     .select()
-                    .eq("from_page", value: page.id)
+                    .eq("from_page", value: events.id)
                     .execute()
                     .value
                 
@@ -134,7 +87,7 @@ func generateGraphvizCommands(using description: StoryInformation, usingClient d
                 
             } catch {
                 print("===")
-                print("Could not access Edge table in database when using page ID of \(page.id).")
+                print("Could not access Edge table in database when using page ID of \(events.id).")
                 print(error.localizedDescription)
             }
             output += "} [minlen=2]\n"
